@@ -1,24 +1,59 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+from config import app, db
+from models import User, Offer, Order
 
 
+@app.route('/users/', method=['GET'])
+def get_all_users():
+    try:
+        users = db.session.query(User).all()
+        return jsonify([user.to_dict() for user in users])
+    except Exception as e:
+        return f'{e}'
 
 
+@app.route('/users/<int:id>', method=['GET'])
+def get_user_by_id(id):
+    try:
+        user = db.session.query(User).filter(User.id == id).first()
+        return jsonify(user.to_dict())
+    except Exception as e:
+        return f'{e}'
 
 
-class Offer(db.Model):
-    __tablename__ = 'offer'
-    id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
-    order = db.relationship("Order")
-    executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    executor = db.relationship("User")
+@app.route('/orders/', method=['GET'])
+def get_all_orders():
+    try:
+        orders = db.session.query(Order).all()
+        return jsonify([order.get_order() for order in orders])
+    except Exception as e:
+        return f'{e}'
 
 
-db.create_all()
-db.session.commit()
+@app.route('/orders/<int:id>', method=['GET'])
+def get_order_by_id(id):
+    try:
+        order = db.session.query(Order).filter(Order.id == id).first()
+        return jsonify(order.get_order())
+    except Exception as e:
+        return f'{e}'
+
+
+@app.route('/ooffers/', method=['GET'])
+def get_all_offers():
+    try:
+        offers = db.session.query(Offer).all()
+        return jsonify([offer.get_offer() for offer in offers])
+    except Exception as e:
+        return f'{e}'
+
+
+@app.route('/ofers/<int:id>', method=['GET'])
+def get_offer_by_id(id):
+    try:
+        offer = db.session.query(Offer).filter(Offer.id == id).first()
+        return jsonify(offer.get_offer())
+    except Exception as e:
+        return f'{e}'
+
