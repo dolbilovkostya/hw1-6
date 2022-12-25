@@ -37,15 +37,15 @@ class Order(db.Model):
 
     def get_order(self):
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'start_date': self.start_date,
-            'end_date': self.end_date,
-            'address': self.address,
-            'price': self.price,
-            'customer_id': self.customer_id,
-            'executor_id': self.executor_id
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "address": self.address,
+            "price": self.price,
+            "customer_id": self.customer_id,
+            "executor_id": self.executor_id
         }
 
 
@@ -57,7 +57,7 @@ class Offer(db.Model):
 
     def get_offer(self):
         return {
-            'id': self.id,
-            'order_id': self.order_id,
-            'executor_id': self.executor_id
+            "id": self.id,
+            "order_id": self.order_id,
+            "executor_id": self.executor_id
         }
